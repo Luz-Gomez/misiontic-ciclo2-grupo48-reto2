@@ -1,0 +1,170 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+public class Reserva {
+    private Date fecha;
+    private String cliente;
+    private List<Vehiculo> vehiculos;
+
+    public Reserva(Date fecha, String cliente) {
+        this.fecha = fecha;
+        this.cliente = cliente;
+        vehiculos = new ArrayList<>();
+   }
+
+    public String getCliente() {
+        return cliente;
+    }
+
+    public void adicionarVehiculo(Vehiculo vehiculo) {
+        vehiculos.add(vehiculo);
+    }
+
+    public Integer calcularCantidadVehiculos() {
+        Integer tamano = vehiculos.size();
+        return tamano;
+    }
+
+    public Double calcularSubtotal() {
+        Double subtotal = 0d;
+        for (Vehiculo vehiculo : vehiculos) {
+            subtotal += vehiculo.calcularPrecio();
+        }
+        return subtotal;
+    }
+
+    public Double calcularDescuentos() {
+        Double descuento = 0d;
+        for (Vehiculo vehiculo : vehiculos) {
+            descuento += vehiculo.calcularDescuento(fecha);
+        }
+        return descuento;
+    }
+
+    public Double calcularImpuestos() {
+        Double impuesto = 0d;
+        for (Vehiculo vehiculo : vehiculos) {
+            impuesto += (vehiculo.calcularPrecio() - vehiculo.calcularDescuento(fecha)) * 
+                    (vehiculo.calcularPorcentajeImpuesto() / 100);
+        }
+        return impuesto;
+    }
+
+    public Double calcularTotal() {
+        return calcularSubtotal() - calcularDescuentos() + calcularImpuestos();
+    }
+}
+
+public abstract class Vehiculo {
+    protected String marca;
+    protected String modelo;
+    protected Double precioBase;
+
+   public Vehiculo(String marca, String modelo, Double precioBase) {
+        this.marca = marca;
+        this.modelo = modelo;
+        this.precioBase = precioBase;
+    }
+
+    public abstract Double calcularPrecio();
+
+    public abstract Double calcularPorcentajeImpuesto();
+
+    public Double calcularDescuento(Date fecha) {
+        Double descuento = 0d;
+        var cal = GregorianCalendar.getInstance(); 
+        cal.setTime(fecha); 
+        var mes = cal.get(Calendar.MONTH);
+        switch (mes) {
+            case Calendar.MAY:
+                if (marca == "Mazda") {
+                    descuento += calcularPrecio() * (10d/100);
+                }
+                break;
+            case Calendar.JUNE:
+                if (marca == "BMW") {
+                    if (this instanceof Automovil) {
+                        descuento += calcularPrecio() * (5d/100);
+                    } else {
+                        descuento += calcularPrecio() * (10d/100);
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+        return descuento;
+    }
+}
+
+public class Automovil extends Vehiculo {
+    private TipoTransmision transmision;
+    private Boolean vidriosElectricos;
+    private Boolean aireAcondicionado;
+    
+    public Automovil(String marca, String modelo, Double precioBase, TipoTransmision transmision,
+            Boolean vidriosElectricos, Boolean aireAcondicionado) {
+        super(marca, modelo, precioBase);
+        this.transmision = transmision;
+        this.vidriosElectricos = vidriosElectricos;
+        this.aireAcondicionado = aireAcondicionado;
+    }
+
+    public Double calcularPrecio() {
+        Double precio = precioBase;
+        if (transmision == TipoTransmision.AUTOMATICA) {
+            precio += (precio * (7d/100));
+        }
+        if (vidriosElectricos == true) {
+            precio += 300_000d;
+        }
+        if (aireAcondicionado == true) {
+            precio += 2_500_000d;
+        }
+        return precio;
+    }
+
+    public Double calcularPorcentajeImpuesto() {
+        Double precio = calcularPrecio();
+        Double impuesto = 0d;
+        if (precio > 80_000_000d) {
+            impuesto = 19d;
+        }
+        return impuesto;
+    }
+}
+
+public class Motocicleta extends Vehiculo {
+    private Integer cilindraje;
+
+    public Motocicleta(String marca, String modelo, Double precioBase, Integer cilindraje) {
+        super(marca, modelo, precioBase);
+        this.cilindraje = cilindraje;
+    }
+
+    public Double calcularPrecio() {
+        Double precio = precioBase;
+        if (cilindraje >= 150 && cilindraje <= 300) {
+            precio += 400_000d;
+        } else if (cilindraje >= 301 && cilindraje <= 600) {
+            precio += 800_000d;
+        } else if (cilindraje > 600) {
+            precio += 1_200_000d;
+        }
+        return precio;
+   }
+
+    public Double calcularPorcentajeImpuesto() {
+        Double precio = calcularPrecio();
+        Double impuesto = 0d;
+        if (precio > 6_100_000d) {
+            impuesto = 19d;
+        }
+        return impuesto;
+    }
+}
+
+public enum TipoTransmision {MANUAL, AUTOMATICA}
