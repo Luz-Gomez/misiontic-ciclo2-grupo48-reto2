@@ -6,7 +6,6 @@ public class Motocicleta extends Vehiculo {
     public Motocicleta(String marca, String modelo, Double precioBase, Integer cilindraje) {
         super(marca, modelo, precioBase);
         this.cilindraje = cilindraje;
-        System.out.println("precio base " + precioBase);
     }
 
     public Double calcularPrecio() {
@@ -25,7 +24,7 @@ public class Motocicleta extends Vehiculo {
         Double precio = calcularPrecio();
         Double impuesto = 0d;
         if (precio > 6_100_000d) {
-            impuesto = precio * (19d/100);
+            impuesto = 19d;
         }
         return impuesto;
     }

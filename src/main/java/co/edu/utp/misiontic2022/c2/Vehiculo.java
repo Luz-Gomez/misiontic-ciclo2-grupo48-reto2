@@ -26,12 +26,12 @@ public abstract class Vehiculo {
         var mes = cal.get(Calendar.MONTH);
         switch (mes) {
             case Calendar.MAY:
-                if (this.marca == "Mazda") {
+                if (marca == "Mazda") {
                     descuento += calcularPrecio() * (10d/100);
                 }
                 break;
             case Calendar.JUNE:
-                if (this.marca == "BMW") {
+                if (marca == "BMW") {
                     if (this instanceof Automovil) {
                         descuento += calcularPrecio() * (5d/100);
                     } else {

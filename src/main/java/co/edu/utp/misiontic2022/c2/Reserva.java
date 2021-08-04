@@ -46,10 +46,9 @@ public class Reserva {
 
     public Double calcularImpuestos() {
         Double impuesto = 0d;
-        System.out.println("Fecha" + fecha);
         for (Vehiculo vehiculo : vehiculos) {
-            impuesto = (vehiculo.calcularPrecio() - vehiculo.calcularDescuento(fecha));
-            impuesto *= vehiculo.calcularPorcentajeImpuesto() / 100;
+            impuesto += (vehiculo.calcularPrecio() - vehiculo.calcularDescuento(fecha)) * 
+                    (vehiculo.calcularPorcentajeImpuesto() / 100);
         }
         return impuesto;
     }

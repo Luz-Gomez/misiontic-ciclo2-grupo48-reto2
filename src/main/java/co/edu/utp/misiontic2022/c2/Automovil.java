@@ -16,7 +16,7 @@ public class Automovil extends Vehiculo {
     public Double calcularPrecio() {
         Double precio = precioBase;
         if (transmision == TipoTransmision.AUTOMATICA) {
-            precio *= (7d/100);
+            precio += (precio * (7d/100));
         }
         if (vidriosElectricos == true) {
             precio += 300_000d;
@@ -29,10 +29,9 @@ public class Automovil extends Vehiculo {
 
     public Double calcularPorcentajeImpuesto() {
         Double precio = calcularPrecio();
-        System.out.println("Impueso " + precio);
         Double impuesto = 0d;
         if (precio > 80_000_000d) {
-            impuesto = precio * (19d/100);
+            impuesto = 19d;
         }
         return impuesto;
     }
