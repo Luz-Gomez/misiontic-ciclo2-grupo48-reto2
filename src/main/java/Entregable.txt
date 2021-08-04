@@ -1,10 +1,12 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class Reserva {
+class Reserva {
     private Date fecha;
     private String cliente;
     private List<Vehiculo> vehiculos;
@@ -58,7 +60,7 @@ public class Reserva {
     }
 }
 
-public abstract class Vehiculo {
+abstract class Vehiculo {
     protected String marca;
     protected String modelo;
     protected Double precioBase;
@@ -100,7 +102,7 @@ public abstract class Vehiculo {
     }
 }
 
-public class Automovil extends Vehiculo {
+class Automovil extends Vehiculo {
     private TipoTransmision transmision;
     private Boolean vidriosElectricos;
     private Boolean aireAcondicionado;
@@ -137,7 +139,7 @@ public class Automovil extends Vehiculo {
     }
 }
 
-public class Motocicleta extends Vehiculo {
+class Motocicleta extends Vehiculo {
     private Integer cilindraje;
 
     public Motocicleta(String marca, String modelo, Double precioBase, Integer cilindraje) {
@@ -167,4 +169,4 @@ public class Motocicleta extends Vehiculo {
     }
 }
 
-public enum TipoTransmision {MANUAL, AUTOMATICA}
+enum TipoTransmision {MANUAL, AUTOMATICA}
